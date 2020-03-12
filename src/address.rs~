@@ -1,0 +1,43 @@
+use rustc_hex::ToHex;
+use std::fmt;
+
+/// Ethereum address
+pub struct Address([u8; 20]);
+
+impl Address {
+    pub fn to_vec(&self) -> Vec<u8> {
+        self.0.to_vec()
+    }
+}
+
+impl From<[u8; 20]> for Address {
+    fn from(array: [u8; 20]) -> Self {
+        Address(array)
+    }
+}
+
+impl From<&[u8]> for Address {
+    fn from(slice: &[u8]) -> Self {
+        let mut address = [0u8; 20];
+        address.copy_from_slice(slice);
+        Address(address)
+    }
+}
+
+impl AsRef<[u8]> for Address {
+    fn as_ref(&self) -> &[u8] {
+        &self.0
+    }
+}
+
+impl fmt::Display for Address {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> std::result::Result<(), fmt::Error> {
+        write!(fmt, "0x{}", self.0.to_hex::<String>())
+    }
+}
+
+impl fmt::Debug for Address {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> std::result::Result<(), fmt::Error> {
+        write!(fmt, "Address({})", self)
+    }
+}
